@@ -2,7 +2,6 @@ package com.baktiyar11.data.network.worker
 
 import android.content.Context
 import androidx.work.CoroutineWorker
-import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import com.baktiyar11.data.database.CoinInfoDao
@@ -24,12 +23,9 @@ class RefreshDataWorker(
     override suspend fun doWork(): Result {
         while (true) {
             try {
-                val topCoins = api.getTopCoinsInfo(limit = 50)
-                val fSym = mapCoinNameFromListCloudToString.map(topCoins)
-                val jsonContainer = api.getFullPriceList(fSym = fSym)
-                val coinInfoDtoList = mapJsonContainerToListCoinInfo.map(jsonContainer)
-                val dbModelList = coinInfoDtoList.map { mapCoinInfoFromCloudToStorage.map(it) }
-                coinInfoDao.insertPriceList(dbModelList)
+                coinInfoDao.insertPriceList(mapJsonContainerToListCoinInfo.map(api.getFullPriceList(
+                    fSym = mapCoinNameFromListCloudToString.map(api.getTopCoinsInfo(limit = 50))))
+                    .map { mapCoinInfoFromCloudToStorage.map(it) })
             } catch (e: Exception) {
             }
             delay(10000)
@@ -38,8 +34,6 @@ class RefreshDataWorker(
 
     companion object {
         const val NAME = "RefreshDataWorker"
-
-        fun makeRequest(): OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
+        fun makeRequest() = OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
     }
 }

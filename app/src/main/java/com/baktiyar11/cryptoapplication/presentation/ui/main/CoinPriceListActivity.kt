@@ -1,8 +1,8 @@
 package com.baktiyar11.cryptoapplication.presentation.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.baktiyar11.cryptoapplication.R
 import com.baktiyar11.cryptoapplication.databinding.ActivityCoinPriceListBinding
 import com.baktiyar11.cryptoapplication.presentation.ui.adapter.CoinInfoAdapter
@@ -22,24 +22,15 @@ class CoinPriceListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         observeViewModel()
-        setupClickListener()
-        swipeRefresh()
     }
 
     private fun observeViewModel() = binding.apply {
+        setupClickListener()
+        rvCoinPriceList.adapter = coinInfoAdapter
         viewModel.apply {
             loadData()
             getCoinInfoList()
             coinInfoList.observe(this@CoinPriceListActivity) { coinInfoAdapter.submitList(it) }
-            rvCoinPriceList.adapter = coinInfoAdapter
-        }
-    }
-
-    private fun swipeRefresh() = binding.apply {
-        swipeLayout.setOnRefreshListener {
-            swipeLayout.isRefreshing = true
-            viewModel.loadData()
-            swipeLayout.isRefreshing = false
         }
     }
 
@@ -61,5 +52,4 @@ class CoinPriceListActivity : AppCompatActivity() {
             else launchDetailFragment(coinInfo.fromSymbol)
         }
     }
-
 }
