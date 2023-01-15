@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MapCoinInfoFromCloudToStorage : Mapper<CoinInfoCloud, CoinInfoStorage> {
-    override fun map(from: CoinInfoCloud): CoinInfoStorage = from.run {
+    override fun map(from: CoinInfoCloud) = from.run {
         CoinInfoStorage(
             id = id, fromSymbol = fromSymbol, toSymbol = toSymbol, price = price,
             lastMarket = lastMarket, lastUpdate = convertTimestampToTimeString(lastUpdate),

@@ -78,4 +78,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
     //Swipe Refresh Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    // Work
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }

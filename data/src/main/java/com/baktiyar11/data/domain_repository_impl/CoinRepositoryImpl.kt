@@ -18,5 +18,5 @@ class CoinRepositoryImpl(
     override suspend fun getCoinInfo(fSym: String): CoinInfoDomain =
         mapCoinFromDataToDomain.map(dataSource.getCoinInfo(fSym))
 
-    override suspend fun loadData() = dataSource.loadData()
+    override fun loadData() = dataSource.loadData()
 }

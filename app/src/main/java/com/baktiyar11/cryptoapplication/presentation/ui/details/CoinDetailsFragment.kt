@@ -46,7 +46,7 @@ class CoinDetailFragment : Fragment() {
         }
     }
 
-    private fun getSymbol(): String = requireArguments().getString(EXTRA_FROM_SYMBOL, EMPTY_SYMBOL)
+    private fun getSymbol() = requireArguments().getString(EXTRA_FROM_SYMBOL, EMPTY_SYMBOL)
 
     companion object {
         private const val EXTRA_FROM_SYMBOL = "fSym"
