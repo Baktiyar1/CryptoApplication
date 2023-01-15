@@ -7,14 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.baktiyar11.cryptoapplication.presentation.model.CoinInfoPresentation
 import com.baktiyar11.domain.base.Mapper
 import com.baktiyar11.domain.model.CoinInfoDomain
-import com.baktiyar11.domain.repository.CoinRepository
+import com.baktiyar11.domain.usecase.GetCoinInfoListUseCase
+import com.baktiyar11.domain.usecase.GetCoinInfoUseCase
+import com.baktiyar11.domain.usecase.LoadDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinViewModel @Inject constructor(
-    private val repository: CoinRepository,
+    private val getCoinInfoListUseCase: GetCoinInfoListUseCase,
+    private val getCoinInfoUseCase: GetCoinInfoUseCase,
+    private val loadDataUseCase: LoadDataUseCase,
     private val mapCoinListFromDomainToPresentation: Mapper<List<CoinInfoDomain>, List<CoinInfoPresentation>>,
     private val mapCoinFromDomainToPresentation: Mapper<CoinInfoDomain, CoinInfoPresentation>,
 ) : ViewModel() {
@@ -27,12 +31,12 @@ class CoinViewModel @Inject constructor(
 
     fun getCoinInfoList() = viewModelScope.launch {
         _coinInfoList.value =
-            mapCoinListFromDomainToPresentation.map(repository.getCoinInfoList())
+            mapCoinListFromDomainToPresentation.map(getCoinInfoListUseCase())
     }
 
     fun getDetailInfo(fSym: String) = viewModelScope.launch {
-        _coinInfo.value = mapCoinFromDomainToPresentation.map(repository.getCoinInfo(fSym = fSym))
+        _coinInfo.value = mapCoinFromDomainToPresentation.map(getCoinInfoUseCase(fSym = fSym))
     }
 
-    fun loadData() = viewModelScope.launch { repository.loadData() }
+    fun loadData() = viewModelScope.launch { loadDataUseCase() }
 }
