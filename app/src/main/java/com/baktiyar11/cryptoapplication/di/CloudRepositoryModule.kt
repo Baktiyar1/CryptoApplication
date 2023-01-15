@@ -1,5 +1,6 @@
 package com.baktiyar11.cryptoapplication.di
 
+import android.content.Context
 import com.baktiyar11.data.database.CoinInfoDao
 import com.baktiyar11.data.database.CoinInfoStorage
 import com.baktiyar11.data.model.CoinInfoData
@@ -13,6 +14,7 @@ import com.baktiyar11.domain.base.Mapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -22,17 +24,11 @@ object CloudRepositoryModule {
     @Provides
     @Singleton
     fun provideCloudCoinInfoRepository(
-        api: ApiService, coinInfoDao: CoinInfoDao,
+        @ApplicationContext context: Context, coinInfoDao: CoinInfoDao,
         mapCoinListFromStorageToData: Mapper<List<CoinInfoStorage>, List<CoinInfoData>>,
         mapCoinFromStorageToData: Mapper<CoinInfoStorage, CoinInfoData>,
-        mapJsonContainerToListCoinInfo: Mapper<CoinInfoJsonContainerCloud, List<CoinInfoCloud>>,
-        mapCoinNameFromListCloudToString: Mapper<CoinNamesListCloud, String>,
-        mapCoinInfoFromCloudToStorage: Mapper<CoinInfoCloud, CoinInfoStorage>,
     ): CloudCoinInfoRepository = CloudCoinInfoRepositoryImp(
         coinInfoDao = coinInfoDao, mapCoinListFromStorageToData = mapCoinListFromStorageToData,
-        mapCoinFromStorageToData = mapCoinFromStorageToData, api = api,
-        mapJsonContainerToListCoinInfo = mapJsonContainerToListCoinInfo,
-        mapCoinNameFromListCloudToString = mapCoinNameFromListCloudToString,
-        mapCoinInfoFromCloudToStorage = mapCoinInfoFromCloudToStorage
+        mapCoinFromStorageToData = mapCoinFromStorageToData, context = context,
     )
 }

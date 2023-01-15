@@ -23,7 +23,6 @@ class CoinPriceListActivity : AppCompatActivity() {
         setContentView(binding.root)
         observeViewModel()
         setupClickListener()
-        swipeRefresh()
     }
 
     private fun observeViewModel() = binding.apply {
@@ -32,14 +31,6 @@ class CoinPriceListActivity : AppCompatActivity() {
             getCoinInfoList()
             coinInfoList.observe(this@CoinPriceListActivity) { coinInfoAdapter.submitList(it) }
             rvCoinPriceList.adapter = coinInfoAdapter
-        }
-    }
-
-    private fun swipeRefresh() = binding.apply {
-        swipeLayout.setOnRefreshListener {
-            swipeLayout.isRefreshing = true
-            viewModel.loadData()
-            swipeLayout.isRefreshing = false
         }
     }
 
